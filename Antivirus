@@ -1,0 +1,66 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.util.HashMap;
+import java.util.Set;
+
+class Antivirus {
+    private static final int NOT_FOUND = -1;
+    private static final String VIRUS_DETECTED_MESSAGE = "Virus detected!";
+    private static final String CLEAN_FILE_MESSAGE = "Clean file";
+
+    private int virusCount;
+    private int size;
+    private HashMap<String, String> virusDefinitions;
+
+    void readVirusDefinitions(String filename) throws Exception {
+        try (FileReader in = new FileReader(filename);
+             BufferedReader br = new BufferedReader(in)) {
+            String line;
+            int i = 0;
+            while ((line = br.readLine()) != null) {
+                virusDefinitions.put(line.substring(0, line.indexOf("/")), line.substring(line.indexOf("/") + 1, line.length()));
+                ++i;
+            }
+            size = i;
+        }
+    }
+
+    void scanFile(String file) throws Exception {
+        try (FileReader in = new FileReader(file);
+             BufferedReader br = new BufferedReader(in)) {
+            String line;
+            int count = 0;
+            while ((line = br.readLine()) != null) {
+                Set<String> keys = virusDefinitions.keySet();
+                count++;
+                boolean containsKey = keys.contains(String.valueOf(count));
+                if (containsKey) {
+                    String virus = virusDefinitions.get(String.valueOf(count));
+                    if (line.indexOf(virus) > NOT_FOUND) {
+                        virusCount++;
+                    }
+                }
+            }
+        }
+    }
+
+    void printResult() {
+        if (size == virusCount) {
+            System.out.println(VIRUS_DETECTED_MESSAGE);
+        } else {
+            System.out.println(CLEAN_FILE_MESSAGE);
+        }
+    }
+
+    public static void main(String[] args) {
+        Antivirus antivirus = new Antivirus();
+        try {
+            antivirus.readVirusDefinitions("definitions.txt");
+            antivirus.scanFile("virus.exe");
+            antivirus.printResult();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+

@@ -1,0 +1,218 @@
+I:
+public class ExtendThreadClassTest0 {
+    
+    public static void main(String args[]) {
+        
+        // Create object instance of a class that is subclass of Thread class
+        System.out.println("Creating PrintNameThread object instance..");
+        PrintNameThread pnt1 =
+                new PrintNameThread("A");
+        
+        // Start the thread by invoking start() method
+        System.out.println("Calling start() method of " + pnt1.getName() + " thread");
+        pnt1.start();
+        
+    }
+}
+// Subclass extends Thread class
+public class PrintNameThread extends Thread {
+    
+    PrintNameThread(String name) {
+        super(name);
+    }
+    
+    // Override the run() method of the Thread class.
+    // This method gets executed when start() method 
+    // is invoked.
+    public void run() {
+        System.out.println("run() method of the " + this.getName() + " thread is called" );
+        
+        for (int i = 0; i < 10; i++) {
+            System.out.print(this.getName());
+        }
+    }
+}
+public class ExtendThreadClassTest0 {
+    
+    public static void main(String args[]) {
+        
+         // Create object instance of a class that is subclass of Thread class
+        System.out.println("Creating PrintNameThread object instance..");
+        PrintNameThread pnt1 =
+                new PrintNameThread("A");
+        
+        // Start the thread by invoking start() method
+        System.out.println("Calling start() method of " + pnt1.getName() + " thread");
+        pnt1.start();
+      
+        System.out.println("Creating PrintNameThread object instance..");
+        PrintNameThread pnt2 =
+                new PrintNameThread("B");
+        System.out.println("Calling start() method of " + pnt2.getName() + " thread");
+        pnt2.start(); 
+        
+        System.out.println("Creating PrintNameThread object instance..");
+        PrintNameThread pnt3 =
+                new PrintNameThread("C");
+        System.out.println("Calling start() method of " + pnt3.getName() + " thread");
+        pnt3.start(); 
+    }
+}
+
+II:
+public class RunnableThreadTest1 {
+    
+    public static void main(String args[]) {
+        
+        PrintNameRunnable pnt1 = new PrintNameRunnable("A");
+        Thread t1 = new Thread(pnt1);
+        t1.start();
+        
+        PrintNameRunnable pnt2 = new PrintNameRunnable("B");
+        Thread t2 = new Thread(pnt2);
+        t2.start();
+        
+        PrintNameRunnable pnt3 = new PrintNameRunnable("C");
+        Thread t3 = new Thread(pnt3);
+        t3.start();
+        
+    }
+}
+// The class implements Runnable interface
+class PrintNameRunnable implements Runnable {
+    
+    String name;
+    
+    PrintNameRunnable(String name) {
+        this.name = name;
+    }
+    
+    // Implementation of the run() defined in the
+    // Runnable interface.
+    public void run() {
+        for (int i = 0; i < 10; i++) {
+            System.out.print(name);
+        }
+    }
+}
+class PrintNameRunnable implements Runnable {
+    
+    Thread thread;
+    
+    PrintNameRunnable(String name) {
+        thread = new Thread(this, name);
+        thread.start();
+    }
+    
+    // Implementation of the run() defined in the
+    // Runnable interface.
+    public void run() {
+        String name = thread.getName();
+        for (int i = 0; i < 10; i++) {
+            System.out.print(name);
+        }
+    }
+}
+
+III:
+public class ThreadGroupTest {
+    
+    public static void main (String[] args) {
+        
+        // Start three threads first.  They should belong
+        // to a same ThreadsGroup.
+        new SimpleThread("Boston").start();
+        new SimpleThread("New York").start();
+        new SimpleThread("Seoul").start();
+        
+        // Get ThreadGroup of the current thread and display
+        // the number of active threads that belong to the
+        // ThreadGroup.
+        ThreadGroup group = Thread.currentThread().getThreadGroup();
+        System.out.println("Number of active threads in this thread group = " 
+                            + group.activeCount());
+        
+        // Display the names of the threads in the current
+        // ThreadGroup.
+        Thread[] tarray = new Thread[10];
+        int actualSize = group.enumerate(tarray);
+        for (int i=0; i<actualSize;i++){
+            System.out.println("Thread " + tarray[i].getName() 
+                               + " in thread group " + group.getName());
+        }
+        
+    }
+}
+public class SimpleThread extends Thread {
+    
+    public SimpleThread(String str) {
+        super(str);
+    }
+    
+    public void run() {
+        for (int i = 0; i < 5; i++) {
+            // System.out.format("%d %s%n", i, getName());
+            try {
+                sleep((long)(Math.random() * 1000));
+            } catch (InterruptedException e) {}
+        }
+        System.out.format("DONE! %s%n", getName());
+    }
+}
+public class DisplayAllThreads {
+    
+    public static void main(String[] args) {
+        
+        // Start three threads first.  They should belong
+        // to a same ThreadsGroup.
+        new SimpleThread("Boston").start();
+        new SimpleThread("New York").start();
+        new SimpleThread("Seoul").start();
+        
+        Thread[] tarray = findAllThreads();
+        
+        for (int i=0; i<tarray.length;i++){
+            System.out.println("Thread " + tarray[i].getName()
+            + " in thread group " + tarray[i].getThreadGroup().getName());
+        }
+        
+    }
+    
+    // Create an array of all threads in the system.
+    public static Thread[] findAllThreads() {
+        ThreadGroup group = Thread.currentThread().getThreadGroup();
+        
+        ThreadGroup topGroup = group;
+        
+        while (group != null) {
+            topGroup = group;
+            group = group.getParent();
+        }
+        
+        int estimatedSize = topGroup.activeCount() * 2;
+        Thread[] slackList = new Thread[estimatedSize];
+        
+        int actualSize = topGroup.enumerate(slackList);
+        
+        Thread[] list = new Thread[actualSize];
+        System.arraycopy(slackList, 0, list, 0, actualSize);
+        
+        return list;
+    }
+}
+public class SimpleThread extends Thread {
+    
+    public SimpleThread(String str) {
+        super(str);
+    }
+    
+    public void run() {
+        for (int i = 0; i < 5; i++) {
+            // System.out.format("%d %s%n", i, getName());
+            try {
+                sleep((long)(Math.random() * 1000));
+            } catch (InterruptedException e) {}
+        }
+        System.out.format("DONE! %s%n", getName());
+    }
+}

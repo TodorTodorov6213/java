@@ -1,0 +1,70 @@
+CSV parsing:
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
+
+// Read the CSV file
+FileReader fileReader = new FileReader("data.csv");
+
+// Create a CSV parser
+CSVParser parser = new CSVParser(fileReader, CSVFormat.DEFAULT);
+
+// Iterate through the records
+for (CSVRecord record : parser) {
+  // Access the values by their index or name
+  String field1 = record.get(0);
+  String field2 = record.get("field2");
+}
+
+// Close the parser
+parser.close();
+Binary IO:
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+// Write the data to a binary file
+try (DataOutputStream out = new DataOutputStream(new FileOutputStream("data.bin"))) {
+  out.writeInt(42);
+  out.writeDouble(Math.PI);
+  out.writeBoolean(true);
+}
+
+// Read the data from the binary file
+try (DataInputStream in = new DataInputStream(new FileInputStream("data.bin"))) {
+  int i = in.readInt();
+  double d = in.readDouble();
+  boolean b = in.readBoolean();
+}
+
+
+
+Nearest point:
+import java.awt.Point;
+// A set of points
+Point[] points = {
+  new Point(1, 2),
+  new Point(3, 4),
+  new Point(5, 6),
+  new Point(7, 8)
+};
+
+// The reference point
+Point reference = new Point(0, 0);
+
+// Find the nearest point
+Point nearest = points[0];
+double minDistance = reference.distance(points[0]);
+for (int i = 1; i < points.length; i++) {
+  double distance = reference.distance(points[i]);
+  if (distance < minDistance) {
+    minDistance = distance;
+    nearest = points[i];
+  }
+}
+
+// Print the nearest point
+System.out.println(nearest);  // Outputs "(1, 2)"
+

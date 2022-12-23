@@ -1,0 +1,58 @@
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+
+public class PerformanceTester {
+
+  private static final int NUM_ITERATIONS = 100000;
+
+  public static void main(String[] args) {
+    // Test set performance
+    Set<Integer> hashSet = new HashSet<>();
+    long startTime = System.currentTimeMillis();
+    for (int i = 0; i < NUM_ITERATIONS; i++) {
+      hashSet.add(i);
+    }
+    long endTime = System.currentTimeMillis();
+    long hashSetTime = endTime - startTime;
+
+    Set<Integer> treeSet = new TreeSet<>();
+    startTime = System.currentTimeMillis();
+    for (int i = 0; i < NUM_ITERATIONS; i++) {
+      treeSet.add(i);
+    }
+    endTime = System.currentTimeMillis();
+    long treeSetTime = endTime - startTime;
+
+    System.out.println("HashSet time: " + hashSetTime + " ms");
+    System.out.println("TreeSet time: " + treeSetTime + " ms");
+
+    // Test list performance
+    List<Integer> arrayList = new ArrayList<>();
+    startTime = System.currentTimeMillis();
+    for (int i = 0; i < NUM_ITERATIONS; i++) {
+      arrayList.add(i);
+    }
+    endTime = System.currentTimeMillis();
+    long arrayListTime = endTime - startTime;
+
+    List<Integer> linkedList = new LinkedList<>();
+    startTime = System.currentTimeMillis();
+    for (int i = 0; i < NUM_ITERATIONS; i++) {
+      linkedList.add(i);
+    }
+    endTime = System.currentTimeMillis();
+    long linkedListTime = endTime - startTime;
+
+    System.out.println("ArrayList time: " + arrayListTime + " ms");
+    System.out.println("LinkedList time: " + linkedListTime + " ms");
+  }
+
+}
+
+
+	Програмата дефинира константа NUM_ITERATIONS, която представлява броя на елементите за добавяне към обектите Set и List. След това създава екземпляри на класовете HashSet, TreeSet, ArrayList и LinkedList и използва цикъл за добавяне на NUM_ITERATIONS елемента към всеки обект. Той измерва времето, необходимо за извършване на операциите, като използва метода System.currentTimeMillis() и отпечатва резултатите на конзолата. 
+
+	Програма може да се стартира няколко пъти, за да се види как производителността варира, и може също да се коригира стойността на NUM_ITERATIONS, за да се види как производителността се променя с увеличаване на размера на структурите от данни.
